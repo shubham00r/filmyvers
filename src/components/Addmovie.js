@@ -51,9 +51,9 @@ const AddMovie = () => {
                     type="text"
                     id="name"
                     name="name"
-                    value={form.Title}
+                    value={form.title}
                     onChange={(e) =>
-                      setForm({ ...form, Title: e.target.value })
+                      setForm({ ...form, title: e.target.value })
                     }
                     className="w-full px-3 py-1 text-base leading-8 text-gray-700 transition-colors duration-200 ease-in-out bg-white border border-gray-300 rounded outline-none focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                   />
