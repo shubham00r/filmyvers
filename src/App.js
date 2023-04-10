@@ -4,14 +4,18 @@ import "./App.css";
 import Card from "./components/Card";
 import { Route, Routes } from "react-router-dom";
 import Addmovie from "./components/Addmovie";
+import toast, { Toaster } from "react-hot-toast";
+import Detail from "./components/Detail";
 function App() {
   return (
-    <div className="App relative">
+    <div className="relative App">
       <Header />
       <Routes>
         <Route path="/" exact element={<Card />} />
         <Route path="/addmovie" exact element={<Addmovie />} />
+        <Route path="/detail" exact element={<Detail />} />
       </Routes>
+      <Toaster />
     </div>
   );
 }

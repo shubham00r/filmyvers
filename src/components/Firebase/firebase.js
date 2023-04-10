@@ -20,6 +20,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-export const MovieRef = collection(db, "Movie");
+export const MovieRef = collection(db, "movie");
 // const analytics = getAnalytics(app);
 export default app;
