@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import Addmovie from "./components/Addmovie";
 import toast, { Toaster } from "react-hot-toast";
 import Detail from "./components/Detail";
+import Reviews from "./components/Reviews";
 function App() {
   return (
     <div className="relative App">

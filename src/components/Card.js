@@ -34,13 +34,17 @@ const Card = () => {
               <h1 className="flex items-center">
                 {" "}
                 <span className="text-lime-500">Rating:</span>
-                <Reactstars size={20} half={true} value={5} edit={false} />
+                <Reactstars
+                  size={20}
+                  half={true}
+                  value={e.rating / e.rated}
+                  edit={false}
+                />
               </h1>
               <h1>
                 {" "}
                 <span className="text-lime-500">year:</span> {e.year}
               </h1>
-              <button className="text-zinc-50">Detail</button>
             </div>
           </Link>
         ))}
