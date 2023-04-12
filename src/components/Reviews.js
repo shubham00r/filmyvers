@@ -8,7 +8,7 @@ import {
   updateDoc,
   query,
   where,
-  getDoc,
+  getDocs,
   querySanapshot,
 } from "firebase/firestore";
 import { TailSpin, ThreeDots } from "react-loader-spinner";
@@ -17,10 +17,11 @@ import { dividerClasses } from "@mui/material";
 const Reviews = ({ id, prevRating, userRated }) => {
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [reviewsloading, setReviewsLoading] = useState(false);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
   const [form, setForm] = useState([]);
 
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
+
   const sendReview = async () => {
     setLoading(true);
     try {
@@ -41,19 +42,21 @@ const Reviews = ({ id, prevRating, userRated }) => {
     } catch (error) {}
     setLoading(false);
   };
-  useEffect(() => {
-    async function getData() {
-      setReviewsLoading(true);
-      let quer = query(reviewsRef, where("movieid", "==", id));
-      const querySanapshot = await getDoc(quer);
 
-      querySanapshot.forEach((doc) => {
-        setData((prev) => [...prev, doc.data()]);
-      });
-    }
-    setReviewsLoading(false);
+  const getData = async () => {
+    setReviewsLoading(true);
+    let queryDoc = query(reviewsRef, where("movieid", "==", id));
+    const querySnapshot = await getDocs(queryDoc);
+
+    querySnapshot.docs.forEach((doc) => {
+      setData((prev) => [...prev, doc.data()]);
+    });
+  };
+
+  useEffect(() => {
     getData();
   }, []);
+
   return (
     <div className="w-full py-1 mt-4 border-t-2 border-gray-500">
       <ReactStars
@@ -76,14 +79,22 @@ const Reviews = ({ id, prevRating, userRated }) => {
         {loading ? <TailSpin height={20} color="white" /> : "Share"}
       </button>
       <Toaster />
-      {reviewsloading ? (
+      {reviewsLoading ? (
         <div className="flex justify-center mt-6 ">
           <ThreeDots height={12} color="white" />
         </div>
       ) : (
-        <div>
+        <div className="mt-4">
           {data.map((e, i) => {
-            return <div key={i}>{e.thought}</div>;
+            return (
+              <div className="w-full p-2 mt-2" key={i}>
+                <div className="flex">
+                  <p>{e.name}</p>
+                  <p>{new Date(e.Timestamp).toLocaleString()}</p>
+                </div>
+                <p>{e.thought}</p>
+              </div>
+            );
           })}
         </div>
       )}
