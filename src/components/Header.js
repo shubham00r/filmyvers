@@ -23,7 +23,7 @@ const Header = () => {
         </Link>
       ) : (
         <Link to={"/login"}>
-          <h1 className="flex items-center text-lg bg-green-500 cursor-pointer">
+          <h1 className="flex items-center rounded-md text-lg bg-green-500 cursor-pointer">
             <Button>
               {" "}
               <span>Login</span>{" "}

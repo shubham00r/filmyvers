@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { addDoc } from "firebase/firestore";
 import { MovieRef } from "./Firebase/firebase";
 // import swal from "sweet-alert";
 import toast, { Toaster } from "react-hot-toast";
+import { Appstate } from "../App";
 
 const AddMovie = () => {
+  //  const  useAppssate = useContext(Appstate)
   const [form, setForm] = useState({
     title: "",
     year: "",

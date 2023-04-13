@@ -9,7 +9,7 @@ import Detail from "./components/Detail";
 import Reviews from "./components/Reviews";
 import { createContext, useEffect, useState } from "react";
 import Login from "./components/Login";
-import Sighup from "./components/Sighup";
+import Signup from "./components/Signup";
 
 const Appstate = createContext();
 function App() {
@@ -24,7 +24,7 @@ function App() {
           <Route path="/addmovie" exact element={<Addmovie />} />
           <Route path="/detail/:id" exact element={<Detail />} />
           <Route path="/login" exact element={<Login />} />
-          <Route path="/sighup" exact element={<Sighup />} />
+          <Route path="/signup" exact element={<Signup />} />
         </Routes>
         <Toaster />
       </div>

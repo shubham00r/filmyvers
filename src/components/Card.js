@@ -20,11 +20,11 @@ const Card = () => {
   }, []);
   return (
     <div>
-      <div className="flex flex-wrap justify-between p-3 mt-2">
+      <div className="flex flex-wrap justify-between p-3 mt-2 ">
         {data.map((e, i) => (
           <Link to={`/detail/${e.id}`}>
             <div
-              className="pl-2 mt-6 transition-all duration-500 shadow-lg cursor-pointer Card hover:-translate-y-2"
+              className="pl-2 mt-6 transition-all duration-500 shadow-lg cursor-pointer Card hover:-translate-y-2 "
               key={i}
             >
               <img className="p-2 h-60 md:h-72" src={e.image} alt="" />
@@ -33,8 +33,9 @@ const Card = () => {
               </h1>
               <h1 className="flex items-center">
                 {" "}
-                <span className="text-lime-500">Rating:</span>
+                <span className="text-lime-500 ">Rating:</span>
                 <Reactstars
+                  className="pl-2"
                   size={20}
                   half={true}
                   value={e.rating / e.rated}

@@ -1,12 +1,37 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { query, where, getDoc } from "firebase/firestore";
+import { usersRef } from "./Firebase/firebase";
+import { Appstate } from "../App";
+import bcrypt from "bcryptjs";
 const Login = () => {
+  const navigate = useNavigate();
+  const useAppstate = useContext(Appstate);
   const [form, setForm] = useState({
     mobile: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
+
+  const login = async () => {
+    setLoading(true);
+    try {
+      const quer = query(usersRef, where("mobile", "==", form.mobile));
+      const querySnapshot = await getDoc(quer);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const isUser = bcrypt.compareSync(form.password, data.password);
+        if (isUser) {
+          useAppstate.setLogin(true);
+          useAppstate.setUserName(data.name);
+        }
+      });
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center w-full mt-20">
       <h1 className="text-lg font-bold text-white">Login</h1>
@@ -38,6 +63,7 @@ const Login = () => {
         </div>
         <div className="w-full p-2">
           <button
+            onClick={login}
             disabled={loading}
             className="flex px-8 py-2 mx-auto text-lg text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-indigo-600"
           >
@@ -47,8 +73,8 @@ const Login = () => {
         <div className="text-center">
           <p>
             Do not have account{" "}
-            <Link to={"/sighup"}>
-              <span className="text-blue-600">Sigh up</span>
+            <Link to={"/signup"}>
+              <span className="text-blue-600">Sign up</span>
             </Link>
           </p>
         </div>

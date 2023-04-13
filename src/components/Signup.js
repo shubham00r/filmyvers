@@ -2,6 +2,10 @@ import { useState } from "react";
 import React from "react";
 import { TailSpin } from "react-loader-spinner";
 import { Link } from "react-router-dom";
+import bcrypt from "bcryptjs";
+import { addDoc } from "firebase/firestore";
+import { usersRef } from "./Firebase/firebase";
+import { useNavigate } from "react-router-dom";
 import {
   getAuth,
   RecaptchaVerifier,
@@ -11,7 +15,8 @@ import app from "./Firebase/firebase";
 
 const auth = getAuth(app);
 
-const Sighup = () => {
+const Signup = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     mobile: "",
@@ -20,6 +25,7 @@ const Sighup = () => {
   const [loading, setLoading] = useState(false);
   const [otpsent, setOtpSent] = useState(false);
   const [OTP, setOTP] = useState("");
+
   const generateRecaptha = () => {
     window.recaptchaVerifier = new RecaptchaVerifier(
       "recaptcha-container",
@@ -32,6 +38,7 @@ const Sighup = () => {
       auth
     );
   };
+
   const requestOtp = () => {
     setLoading(true);
     generateRecaptha();
@@ -47,10 +54,36 @@ const Sighup = () => {
         console.log(error);
       });
   };
+
+  const verifyOTP = () => {
+    try {
+      setLoading(true);
+      window.confirmationResult.confirm(OTP).then((result) => {
+        uploadData();
+      });
+      navigate("/login");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const uploadData = async () => {
+    try {
+      const salt = bcrypt.genSalt(10);
+      var hash = bcrypt.hashSync(form.password, salt);
+      await addDoc(usersRef, {
+        name: form.name,
+        password: hash,
+        mobile: form.mobile,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <div className="flex flex-col items-center justify-center w-full mt-20">
-        <h1 className="text-lg font-bold text-white">Sigh up</h1>
+        <h1 className="text-lg font-bold text-white">Sign up</h1>
         {otpsent ? (
           <>
             {" "}
@@ -70,6 +103,7 @@ const Sighup = () => {
               />
             </div>
             <button
+              onClick={verifyOTP}
               disabled={loading}
               className="flex px-8 py-2 mx-auto mt-2 text-lg text-white bg-green-500 border-0 rounded focus:outline-none hover:bg-indigo-600"
             >
@@ -91,7 +125,7 @@ const Sighup = () => {
                   name="message"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="h-10 px-3 py-1 text-base leading-6 text-gray-700 transition-colors duration-200 ease-in-out bg-white bg-opacity-50 border border-gray-300 rounded outline-none resize-none w-[440px] focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
+                  className="h-10 px-3 py-1 text-base leading-6  text-gray-700 transition-colors duration-200 ease-in-out bg-white bg-opacity-50 border border-gray-300 rounded outline-none resize-none w-[440px] focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                 />
               </div>
               <div className="relative">
@@ -157,4 +191,4 @@ const Sighup = () => {
   );
 };
 
-export default Sighup;
+export default Signup;
